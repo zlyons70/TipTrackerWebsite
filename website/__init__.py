@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import os
 
-
 load_dotenv()
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -23,4 +22,16 @@ def create_app():
     # registers the blueprints, url prefix is the url that the blueprint will be accessed from
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    
+    from .models import User, Earning
+    create_database(app)    
     return app
+
+def create_database(app):
+    '''Create the database if it does not exist'''
+    if not os.path.exists('instance/' + DB_NAME):
+        with app.app_context():
+            db.create_all()
+        print("Database Created")
+    print("Database already exists!")
+    return

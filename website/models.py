@@ -4,10 +4,10 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 
 class Earning(db.Model):
-    '''This class tells the Database that all objects must have this structure'''
+    '''This class is used to define the earning table in the database'''
     id = db.Column(db.Integer, primary_key=True)
     # the below data that our user will be storing is going to be the tip number
-    data = db.Column(db.Integer(1000))
+    data = db.Column(db.String(1000))
     # this automatically sets the date to the current date and time
     #TODO Will need to change in the future
     date = db.Column(db.DateTime(timezone=True), default=func.now())

@@ -5,15 +5,18 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    '''Login Page'''
     data = request.form
     return render_template('login.html', boolean=True)
 
 @auth.route('/logout')
 def logout():
+    '''Handles logout page'''
     return "<p>Logout Page</p>"
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
+    '''Handles sign up page'''
     if request.method == 'POST':
         # This will print the form data to the console
         email = request.form.get('email')

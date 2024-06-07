@@ -8,7 +8,7 @@ from . import db
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
-def login():
+def login()->str:
     '''Handles the logic for loading login page and logging in the user'''
     if request.method == 'POST':
         username = request.form.get('username')
@@ -30,14 +30,14 @@ def login():
 @auth.route('/logout')
 # Decorator requires user to be logged in to access this page
 @login_required
-def logout():
+def logout()->str:
     '''Handles logout page'''
     # logs out the user
     logout_user()
     return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
-def sign_up():
+def sign_up()->str:
     '''Handles logic for sign up page and creating a new user in the database'''
     if request.method == 'POST':
         # This will print the form data to the console

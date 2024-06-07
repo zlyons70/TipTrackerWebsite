@@ -9,7 +9,7 @@ db = SQLAlchemy()
 DB_NAME = "database.db"
 secret_key = os.getenv('SECRET_KEY')
 
-def create_app():
+def create_app()->Flask:
     '''Initialize Flask application and return app object'''
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'SECRET_KEY'
@@ -34,14 +34,14 @@ def create_app():
     login_manager.init_app(app)
     
     @login_manager.user_loader
-    def load_user(id):
+    def load_user(id)->User:
         '''This function is used to load the user from the database'''
         # Tells flask what user we're looking for
         return User.query.get(int(id))
     
     return app
 
-def create_database(app):
+def create_database(app)->None:
     '''Create the database if it does not exist'''
     if not os.path.exists('instance/' + DB_NAME):
         with app.app_context():

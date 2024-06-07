@@ -1,3 +1,4 @@
+'''File used to inialize, run webserver, and create the app object'''
 from website import create_app
 
 app = create_app()

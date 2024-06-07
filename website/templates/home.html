@@ -2,6 +2,13 @@
 {% block title %}changed{% endblock %}
 
 {% block content %}
-    <h1>Home</h1>
-    <p>Welcome to the TGTipTracker</p>
+    <h1 align="center">Tips</h1>
+    <p>Enter your tip below</p>
+    <form method="POST">
+        <div class="form-group">
+            <label for="tip">Tip</label>
+            <input type="text" class="form-control" id="tip" name="tip" placeholder="Enter tip">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 {% endblock %}

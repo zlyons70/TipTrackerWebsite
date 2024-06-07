@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+from flask_login import LoginManager
 import os
 
 load_dotenv()
@@ -16,6 +17,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     # Initialize the database
     db.init_app(app)
+    
     # once blueprints are defined we need to tell the flask server to use them
     from .views import views
     from .auth import auth
@@ -24,7 +26,19 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
     
     from .models import User, Earning
-    create_database(app)    
+    create_database(app)
+    
+    # if the user is not logged in it redirects them to the login page
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+    
+    @login_manager.user_loader
+    def load_user(id):
+        '''This function is used to load the user from the database'''
+        # Tells flask what user we're looking for
+        return User.query.get(int(id))
+    
     return app
 
 def create_database(app):

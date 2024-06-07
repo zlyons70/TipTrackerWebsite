@@ -45,6 +45,7 @@ def sign_up()->str:
         username = request.form.get('username')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
+        # below are the checks required to create an account
         if len(email) < 4:
             flash('Email must be greater than 4 characters.', category='error')
         elif len(username) < 2:

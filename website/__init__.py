@@ -47,5 +47,5 @@ def create_database(app)->None:
         with app.app_context():
             db.create_all()
         print("Database Created")
-    print("Database already exists!")
+    print("Database already exists")
     return

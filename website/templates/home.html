@@ -7,7 +7,11 @@
     <form method="POST">
         <div class="form-group">
             <label for="tip">Tip</label>
-            <input type="text" class="form-control" id="tip" name="tip" placeholder="Enter tip">
+            <input type="number" class="form-control" id="tip" name="tip" step=".01" min="0" max="9999" placeholder="Enter tip" required>
+        </div>
+        <div class="form-group>
+            <label for="Date">Date</label>
+            <input type="date" class="form-control" id="date" name="date" placeholder="Enter date in MM/DD/YY" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         <div class="form-group">

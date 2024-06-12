@@ -4,8 +4,7 @@ from flask_login import login_required, current_user
 from .models import Earning
 from . import db
 from datetime import datetime
-from sqlalchemy.sql import func
-
+from .get_tip_functions import get_tips_total, get_tips_month, get_tips_week, get_tips_day, get_tips_year
 views = Blueprint('views', __name__)
 
 @views.route('/', methods=['GET', 'POST'])
@@ -25,35 +24,9 @@ def home()->str:
     
     tips = get_tips_total()
     print("here")
-    month = get_tips_month()
+    month = get_tips_month(5, 2023)
     print(month)
-    
+    print("below I'm testing the week function")
+    week = get_tips_week(5, 1, 7, 2023)
+    print(week)
     return render_template('home.html', user=current_user, tips=tips)
-
-def get_tips_total()->list:
-    '''Used to get all tips from a user'''
-    earnings = Earning.query.filter_by(user_id=current_user.id).all()
-    total = [earnings.data for earnings in earnings]
-    return total
-
-#TODO: Implement ability for user to input the month they want to view
-def get_tips_month()->list:
-    '''Used to get tips in current Month'''
-    total = []
-    current_month = datetime.now().month
-    earnings = (Earning.query
-                .filter_by(user_id=current_user.id)
-                .filter(func.extract('month', Earning.date) == current_month)
-                .all())
-    total = [earnings.data for earnings in earnings]
-    return total
-
-# TODO: Implement ability for user to input the year they want to view
-def get_tips_year()->list:
-    '''Used to get tips in current Year'''
-    current_year = datetime.now().year
-    earnings = (Earning.query.filter_by(user_id=current_user.id)
-                .filter(func.extract('year', Earning.date) == current_year)
-                .all())
-    total = [earnings.data for earnings in earnings]
-    return total

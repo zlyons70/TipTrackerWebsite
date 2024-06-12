@@ -10,7 +10,6 @@ class Earning(db.Model):
     # the below data that our user will be storing is going to be the tip number
     data = db.Column(db.Float, nullable=False)
     # this automatically sets the date to the current date and time
-    #TODO Will need to change in the future
     date = db.Column(db.DateTime(timezone=True))
     # This is a foreign key that is linked to the user table
     # this is used to link the note to the user
@@ -24,5 +23,5 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     username = db.Column(db.String(150), unique=True)
-    # below is essentially a list of all notes the user has created
+    # below is essentially a list of all earnings the user has created
     earning = db.relationship('Earning')

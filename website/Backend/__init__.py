@@ -12,6 +12,7 @@ secret_key = os.getenv('SECRET_KEY')
 def create_app()->Flask:
     '''Initialize Flask application and return app object'''
     app = Flask(__name__)
+    
     app.config['SECRET_KEY'] = 'SECRET_KEY'
     # Tell flask where the database is located
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
@@ -48,4 +49,4 @@ def create_database(app)->None:
             db.create_all()
         print("Database Created")
     print("Database already exists")
-    return
+    return None

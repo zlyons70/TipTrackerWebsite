@@ -13,7 +13,7 @@ secret_key = os.getenv('SECRET_KEY')
 def create_app()->Flask:
     '''Initialize Flask application and return app object'''
     app = Flask(__name__)
-    CORS(app, origins="*")
+    CORS(app)
     app.config['SECRET_KEY'] = 'SECRET_KEY'
     # Tell flask where the database is located
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'

@@ -1,31 +1,45 @@
 '''This file is used to define the different pages/views of the website'''
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from .models import User, Earning
+import jwt, json, os
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
+from dotenv import load_dotenv
 
+load_dotenv()
+secret_key = os.getenv('SECRET_KEY')
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
-def login()->str:
+def login()->json:
     '''Handles the logic for loading login page and logging in the user'''
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+        data = request.json
+        print(data.get('username'))
+        username = data.get('username')
+        password = data.get('password')
         # the below is how we look up a user in the database
         # .first() is used to get the first user that matches the query
         user = User.query.filter_by(username=username).first()
+        print("user here")
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfully', category='success')
+                print('Logged in successfully')
+                token = jwt.encode({
+                    'username': user.username,
+                    'exp': 900,
+                }, secret_key, algorithm='HS256')
                 # remembers that the user is logged in until the session is closed
                 # this is how cookies are used to remember the user
                 login_user(user, remember=True)
-                return redirect(url_for('views.home'))
+                return jsonify({'status': 'success', 
+                                'message': 'Logged in successfully',
+                                'token': token})
             else:
-                flash('Username or Password Incorrect', category='error')
-    return render_template('login.html', current_user=current_user)
+               return jsonify({'status': 'error', 'message': 'Incorrect Username or Password'})
+    return jsonify({'status': 'error', 'message': 'Incorrect Username or Password'})
 
 @auth.route('/logout')
 # Decorator requires user to be logged in to access this page
@@ -71,3 +85,9 @@ def sign_up()->str:
             # once account is created redirect the user to the home page
             return redirect(url_for('views.home'))
     return render_template('signup.html', user=current_user)
+
+@auth.route('/protected')
+@login_required
+def protected():
+    '''This is a protected route that requires the user to be logged in'''
+    return jsonify({'status': 'success', 'message': 'You are logged in'})

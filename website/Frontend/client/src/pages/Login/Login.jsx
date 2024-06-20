@@ -1,11 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
-
+import Logincard from './Logincomp.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <div>
-        <h1>Home Page</h1>
-        </div>
+        <Logincard />
     </React.StrictMode>,
-    )
+  )

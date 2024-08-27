@@ -52,8 +52,14 @@ function Signupcard() {
                 setMessage(data.message)
             }
         })
+        .catch((error) => {
+            console.error('Error:', error)
+            setMessage("Registration failed")
+        })
     }
-
+    const handleAlready = () => {
+        navigate("/login")
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -114,7 +120,7 @@ function Signupcard() {
             </CardContent>
             <CardFooter className="flex justify-center">
             <div className="flex justify-center">
-                <Button variant="link">Already Have An Account?</Button>
+                <Button variant="link" onPress={handleAlready}>Already Have An Account?</Button>
                 </div>
             </CardFooter>
         </Card>

@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import {
     Card,
     CardContent,
@@ -17,6 +18,7 @@ function Logincard() {
     const [password, setPassword] = useState("")
     const [message, setMessage] = useState("")
     const [token, setToken] = useState("")
+    const navigate = useNavigate()
 // handleSubmit function to handle form submission
 // Need to send the data to flask backend
     const handleSubmit = (e) => {
@@ -39,12 +41,21 @@ function Logincard() {
                 setMessage("Login successful")
                 setToken(data.token)
                 localStorage.setItem("token", data.token)
+                navigate("/")
             } else {
                 setMessage(data.message)
             }
         })
-    }
+        .catch((error) => {
+            console.error('Error:', error)
+            setMessage("Login failed")
+        })
+        }
+    
 
+    const handleRegister = () => {
+        navigate("/signup")
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -85,7 +96,7 @@ function Logincard() {
                 </form>
             </CardContent>
             <CardFooter className="flex flex-col items-center space-y-4 mt-4">
-            <Button className="bg-white border border-slate-blueish text-slate-blueish w-full p-2">Create New Account</Button>
+            <Button className="bg-white border border-slate-blueish text-slate-blueish w-full p-2" onPress={handleRegister}>Create New Account</Button>
             </CardFooter>
         </Card>
         {message && <p> {message}</p>}

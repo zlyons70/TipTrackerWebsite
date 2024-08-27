@@ -16,16 +16,15 @@ def login()->json:
     '''Handles the logic for loading login page and logging in the user'''
     if request.method == 'POST':
         data = request.json
-        print(data.get('username'))
         username = data.get('username')
         password = data.get('password')
         # the below is how we look up a user in the database
         # .first() is used to get the first user that matches the query
         user = User.query.filter_by(username=username).first()
-        print("user here")
+        print("This is in auth.py, handles the login page")
+        print("this print statement is for debugging and workd")
         if user:
             if check_password_hash(user.password, password):
-                flash('Logged in successfully', category='success')
                 print('Logged in successfully')
                 token = jwt.encode({
                     'username': user.username,
@@ -54,24 +53,26 @@ def logout()->str:
 def sign_up()->str:
     '''Handles logic for sign up page and creating a new user in the database'''
     if request.method == 'POST':
+        data = request.json
         # This will print the form data to the console
-        email = request.form.get('email')
-        username = request.form.get('username')
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
+        email = data.get('email')
+        username = data.get('username')
+        password = data.get('password')
+        confirm_password = data.get('confirm_password')
+        print(email, username, password, confirm_password)
         # below are the checks required to create an account
         if len(email) < 4:
-            flash('Email must be greater than 4 characters.', category='error')
+            return jsonify({'status': 'error', 'message': 'Email must be greater than 4 characters.'})
         elif len(username) < 2:
-            flash('Username must be greater than 2 characters.', category='error')
+            return jsonify({'status': 'error', 'message': 'Username must be greater than 2 characters.'})
         elif password != confirm_password:
-            flash('Passwords do not match.', category='error')
+            return jsonify({'status': 'error', 'message': 'Passwords do not match.'})
         elif len(password) < 7:
-            flash('Password must be at least 7 characters.', category='error')
+            return jsonify({'status': 'error', 'message': 'Password must be at least 7 characters.'})
         elif User.query.filter_by(email=email).first():
-            flash('Email is already in use.', category='error')
+            return jsonify({'status': 'error', 'message': 'Email is already in use.'})
         elif User.query.filter_by(username=username).first():
-            flash('Username is already in use.', category='error')
+            return jsonify({'status': 'error', 'message': 'Username is already in use.'})
         else:
             # Below hashes the password to prevent it from being stored in plain text
             # note that this is a one way hash
@@ -79,11 +80,18 @@ def sign_up()->str:
             # adds user to DB and commits the change
             db.session.add(new_user)
             db.session.commit()
-            flash("Account Created", category='success')
+            # creates a token for the user
+            # for this session to be valid for 15 minutes
+            token = jwt.encode({
+                    'username': new_user.username,
+                    'exp': 900,
+                }, secret_key, algorithm='HS256')
             login_user(new_user, remember=True)
 
             # once account is created redirect the user to the home page
-            return redirect(url_for('views.home'))
+            return jsonify({'status': 'success', 
+                                'message': 'Account Created!',
+                                'token': token})
     return render_template('signup.html', user=current_user)
 
 @auth.route('/protected')

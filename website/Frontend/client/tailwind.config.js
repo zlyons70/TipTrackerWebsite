@@ -23,6 +23,12 @@ module.exports = {
       colors: {
         'slate-blueish': '#5b7c99',
         'slate-grayish': '#24292e',
+        'mixed-100':  '#1a1625',
+        'mixed-200':  '#2f2b3a',
+        'mixed-300':  '#46424f',
+        'mixed-400':  '#5e5a66',
+        'mixed-500':  '#76737e',
+        'mixed-600':  '#908d96',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -11,7 +11,6 @@ import {
 import { format, set } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
-// import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import axios from "axios";
 
@@ -32,15 +31,15 @@ function AddTips() {
         console.log("N/A Bev Sales: ", naBevSales);
         console.log("Alcohol Sales: ", alcoholSales);
         console.log("Date: ", date);
-        // axios.post("http://localhost:5000/addtips", {
-        //     declaredTips: declaredTips,
-        //     cashTips: cashTips,
-        //     foodSales: foodSales,
-        //     naBevSales: naBevSales,
-        //     alcoholSales: alcoholSales,
-        //     date: date
-        // })
-        // .then(response => response.json())
+        axios.post("http://localhost:5000/addtips", {
+            declaredTips: declaredTips,
+            cashTips: cashTips,
+            foodSales: foodSales,
+            naBevSales: naBevSales,
+            alcoholSales: alcoholSales,
+            date: date
+        })
+        .then(response => response.json())
         then(data => {
             if (data.status === "success") {
                 setMessage("Tips added successfully");
@@ -52,15 +51,15 @@ function AddTips() {
 
     return (
         <>
-        <Card className="flex justify-center items-center">
-            <CardHeader className="flex gap-3 justify-center">
+        <Card className="flex justify-center items-center p-6 shadow-lg">
+            <CardHeader className="flex gap-3 justify-center bg-gray-100 p-4 rounded-t-lg">
                 <div className="flex flex-col">
-                    <p className="text-md">Input Tips</p>
+                    <p className="text-lg font-semibold">Input Tips</p>
                 </div>
             </CardHeader>
             <Divider/>
-            <CardBody>
-                <div className="flex w-full flex-wrap md:flex-nowrap gap-4"> 
+            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
+                <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
                     <Input type="text" label="Declared Tips" placeholder="Enter your Declared Tips" 
                         id="declaredTips"
                         value={declaredTips}
@@ -68,15 +67,15 @@ function AddTips() {
                         />
                 </div>
             </CardBody>
-            <CardBody>
-                <div className="flex w-full flex-wrap md:flex-nowrap gap-4"> 
+            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
+                <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
                     <Input type="text" label="Cash Tips" placeholder="Enter your Cash Tips" 
                         id="cashTips"
                         value={cashTips}
                         onChange={(e) => setCashTips(e.target.value)}/>
                 </div>
             </CardBody>
-            <CardBody>
+            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4 justify-center">
                 <Popover>
                     <PopoverTrigger asChild>
@@ -103,22 +102,22 @@ function AddTips() {
                 </div>
             </CardBody>
             <Divider/>
-            <CardHeader className="flex gap-3 justify-center">
+            <CardHeader className="flex gap-3 justify-center bg-gray-100 p-4 rounded-t-lg">
                 <div className="flex flex-col">
-                    <p className="text-md">Tipout Numbers</p>
+                    <p className="text-lg font-semibold">Tipout Numbers</p>
                 </div>
             </CardHeader>
-            <CardBody>
+            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4"> 
                     <Input type="text" label="Food Sales" placeholder="Enter your Food Sales" />
                 </div>
             </CardBody>
-            <CardBody>
+            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4"> 
                     <Input type="text" label="N/A Bev Sales" placeholder="Enter your N/A Bev Sales" />
                 </div>
             </CardBody>
-            <CardBody>
+            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4"> 
                     <Input type="text" label="Alcohol Sales" placeholder="Enter your Alcohol Sales" />
                 </div>

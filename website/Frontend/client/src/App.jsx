@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import './App.css'
 import axios from 'axios'
+import Dashboard from './pages/home/Dashboard'
+import Logincard from './pages/Login/Logincomp'
+import Signupcard from './pages/signup/Signupcomp'
 import {
   Card,
   CardContent,
@@ -25,21 +29,13 @@ function App() {
   }, [])
 
   return (
-    <>
-  <Card>
-    <CardHeader>
-      <CardTitle>Card Title</CardTitle>
-      <CardDescription>Card Description</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <p>Card Content</p>
-    </CardContent>
-    <CardFooter>
-      <p>Card Footer</p>
-    </CardFooter>
-  </Card>
-
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/login" element={<Logincard />} />
+        <Route path="/signup" element={<Signupcard />} />
+      </Routes>
+    </BrowserRouter>
 )
 }
 

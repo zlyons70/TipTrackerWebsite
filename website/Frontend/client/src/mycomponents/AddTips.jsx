@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import {Input} from "@nextui-org/input";
 import {Button} from "@nextui-org/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {Card, CardHeader, CardBody, CardFooter, Divider, Link} from "@nextui-org/react";
 import {
     Popover,
@@ -59,20 +60,17 @@ function AddTips() {
             </CardHeader>
             <Divider/>
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">
-                <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
-                    <Input type="text" label="Declared Tips" placeholder="Enter your Declared Tips" 
-                        id="declaredTips"
-                        value={declaredTips}
-                        onChange={(e) => setDeclaredTips(e.target.value)}
-                        />
-                </div>
-            </CardBody>
-            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
-                <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
-                    <Input type="text" label="Cash Tips" placeholder="Enter your Cash Tips" 
-                        id="cashTips"
-                        value={cashTips}
-                        onChange={(e) => setCashTips(e.target.value)}/>
+                <div className="flex w-full flex-wrap md:flex-nowrap gap-4 justify-center">
+                    <Select>
+                        <SelectTrigger className="w-[280px]">
+                            <SelectValue placeholder="Select Job Class" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="bayhost">BayHost</SelectItem>
+                            <SelectItem value="shiftlead">Shift Lead</SelectItem>
+                            <SelectItem value="eventambassador">Event Ambassador</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
             </CardBody>
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">
@@ -101,10 +99,29 @@ function AddTips() {
                     </Popover>
                 </div>
             </CardBody>
+            
+            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
+                <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
+                    <Input type="text" label="Declared Tips" placeholder="Enter your Declared Tips" 
+                        id="declaredTips"
+                        value={declaredTips}
+                        onChange={(e) => setDeclaredTips(e.target.value)}
+                        />
+                </div>
+            </CardBody>
+            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
+                <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
+                    <Input type="text" label="Cash Tips" placeholder="Enter your Cash Tips" 
+                        id="cashTips"
+                        value={cashTips}
+                        onChange={(e) => setCashTips(e.target.value)}/>
+                </div>
+            </CardBody>
             <Divider/>
+
             <CardHeader className="flex gap-3 justify-center bg-gray-100 p-4 rounded-t-lg">
                 <div className="flex flex-col">
-                    <p className="text-lg font-semibold">Tipout Numbers</p>
+                    <p className="text-lg font-semibold">Tipout Numbers (Optional)</p>
                 </div>
             </CardHeader>
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">

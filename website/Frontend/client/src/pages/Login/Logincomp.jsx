@@ -9,7 +9,6 @@ import {
   } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import "../../index.css"
 

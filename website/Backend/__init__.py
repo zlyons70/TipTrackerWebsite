@@ -3,11 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from dotenv import load_dotenv
 from flask_login import LoginManager
+
+#import mysql.connector
 import os
 
 load_dotenv()
 db = SQLAlchemy()
-DB_NAME = "database.db"
+DB_NAME = "test_db"
 secret_key = os.getenv('SECRET_KEY')
 
 def create_app()->Flask:
@@ -17,6 +19,8 @@ def create_app()->Flask:
     app.config['SECRET_KEY'] = 'SECRET_KEY'
     # Tell flask where the database is located
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    # below I am using mysql rather than sqlite
+    #app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('mysql_connection')
     # Initialize the database
     db.init_app(app)
     

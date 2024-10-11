@@ -22,7 +22,6 @@ def create_app()->Flask:
     app.config['SECRET_KEY'] = secret_key
     app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_CONNECTION
     db.init_app(app)
-    
     # once blueprints are defined we need to tell the flask server to use them
     from .views import views
     from .auth import auth
@@ -32,6 +31,7 @@ def create_app()->Flask:
     
     from .models import User, Earning
     create_database(app)
+    
     
     # if the user is not logged in it redirects them to the login page
     login_manager = LoginManager()
@@ -61,8 +61,13 @@ def create_database(app)->None:
     if not result:
         mycursor.execute("CREATE DATABASE test_db")
         print("Database Created")
+        mycursor.execute("SHOW DATABASES LIKE 'test_db'")
+        result = mycursor.fetchone()
+        print(result)
     else:
         print("Database already exists")
+    with app.app_context():
+        db.create_all()
     return None
 
 def delete_database(app)->None:
@@ -82,3 +87,4 @@ def delete_database(app)->None:
         print("Database Deleted")
     else:
         print("Database does not exist")
+    return None

@@ -1,4 +1,6 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import httpClient from "../httpClient"
 import {
   Navbar, 
   NavbarBrand, 
@@ -13,7 +15,12 @@ import "../index.css"
 import { useLocation } from "react-router-dom";
 function MainNav() {
     const location = useLocation();
-
+    const navigate = useNavigate();
+    const logoutUser = async () => {
+      await httpClient.post("http://localhost:5000/logout")
+      navigate("/login")
+       
+    }
     return (
       <> 
       <Navbar isBordered isBlurred={false}>
@@ -37,7 +44,7 @@ function MainNav() {
         </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem>
-            <Button as={Link} color="primary" href="#" variant="flat">
+            <Button onPress={logoutUser} color="primary" href="#" variant="flat">
               Sign Out
             </Button>
           </NavbarItem>

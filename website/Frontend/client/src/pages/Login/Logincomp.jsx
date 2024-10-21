@@ -30,43 +30,17 @@ function Logincard() {
                     username: username,
                     password: password
                 })
+                navigate("/")
             }
             catch (error) {
                 if (error === 401)
                     setMessage("Invalid credentials")
                 else
                     setMessage("Login failed")
-                
             }
-        // fetch("http://localhost:5000/login", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify({
-        //         username: username,
-        //         password: password
-        //     })
-
         }
-        // .then(response => response.json())
-        // .then(data => {
-        //     if (data.status === "success") {
-        //         setMessage("Login successful")
-
-                               
-        //         navigate("/")
-        //     } else {
-        //         setMessage(data.message)
-        //     }
-        // })
-        // .catch((error) => {
-        //     console.error('Error:', error)
-        //     setMessage("Login failed")
-        // })
         loginUser()
         }
-    
 
     const handleRegister = () => {
         navigate("/signup")
@@ -111,7 +85,7 @@ function Logincard() {
                 </form>
             </CardContent>
             <CardFooter className="flex flex-col items-center space-y-4 mt-4">
-            <Button className="bg-white border border-slate-blueish text-slate-blueish w-full p-2" onPress={handleRegister}>Create New Account</Button>
+            <Button className="bg-white border border-slate-blueish text-slate-blueish w-full p-2" onClick={handleRegister}>Create New Account</Button>
             </CardFooter>
         </Card>
         {message && <p> {message}</p>}

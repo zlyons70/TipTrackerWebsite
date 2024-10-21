@@ -6,4 +6,4 @@ class ApplicationConfig:
     SESSION_PERMANENT = False
     SESSION_USE_SIGNER = True
     SESSION_REDIS = redis.Redis(host='localhost', port=6379)
-    
+    SESSION_KEY_PREFIX = 'flask_session'

@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import "../../index.css"
+import httpClient from "../../httpClient"
+
 
 function Signupcard() {
     const [email, setEmail] = useState("")
@@ -18,10 +20,17 @@ function Signupcard() {
     const [password, setPassword] = useState("")
     const [confirm_password, setConfirmPassword] = useState("")
     const [message, setMessage] = useState("")
-    const [token, setToken] = useState("")
     const navigate = useNavigate()
 // handleSubmit function to handle form submission
 // Need to send the data to flask backend
+// Used to login user once account is created, creates session
+    const loginUser = async () => {
+        const response = await httpClient.post("//localhost:5000/login", {
+            username: username,
+            password: password
+        })
+        navigate("/")
+}
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log("Email: ", email)
@@ -44,9 +53,7 @@ function Signupcard() {
         .then(data => {
             if (data.status === "success") {
                 setMessage("Registration successful!")
-                setToken(data.token)
-                localStorage.setItem("token", data.token)
-                navigate("/")
+                loginUser()
                 
             } else {
                 setMessage(data.message)
@@ -120,7 +127,7 @@ function Signupcard() {
             </CardContent>
             <CardFooter className="flex justify-center">
             <div className="flex justify-center">
-                <Button variant="link" onPress={handleAlready}>Already Have An Account?</Button>
+                <Button variant="link" onClick={handleAlready}>Already Have An Account?</Button>
                 </div>
             </CardFooter>
         </Card>

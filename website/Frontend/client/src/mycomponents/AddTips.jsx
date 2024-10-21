@@ -22,7 +22,7 @@ function AddTips() {
     const [naBevSales, setNaBevSales] = useState("");
     const [alcoholSales, setAlcoholSales] = useState("");
     const [date, setDate] = useState("");
-    // Check if the user is logged in
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Declared Tips: ", declaredTips);

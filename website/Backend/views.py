@@ -12,8 +12,9 @@ views = Blueprint('views', __name__)
 def home()->json:
     '''This function handles the logic of the home page'''
     print("This is in views.py, handles the home page")
-    user_id = session.get('user_id')
-    print(user_id)
+    user_data = get_current_user()
+    print(user_data)
+    user_id = "shit"
     if request.method == 'POST':
         data = request.json
         print(data)

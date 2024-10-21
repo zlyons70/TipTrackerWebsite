@@ -34,22 +34,11 @@ def login()->json:
                return jsonify({'status': 'error', 'message': 'Incorrect Username or Password'}), 401
     return jsonify({'status': 'error', 'message': 'Incorrect Username or Password'}), 401
 
-@auth.route('/@me')
-def get_current_user()->json:
-    '''This function is used to get the current user'''
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({'status': 'error', 'message': 'User not found'}), 401
-    user = User.query.get(user_id)
-    if user:
-        return jsonify({'status': 'success', 'message': 'User found', 'user': user.username}), 200
-
-@auth.route('/logout')
-def logout()->str:
-    '''Handles logout page'''
-    # logs out the user
-    logout_user()
-    return redirect(url_for('auth.login'))
+@auth.route('/logout', methods = ['POST'])
+def logout()->json:
+    '''Handles logout button'''
+    session.pop('user_id')
+    return jsonify({'status': 'success', 'message': 'Logged out successfully'})
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up()->json:
@@ -86,26 +75,15 @@ def sign_up()->json:
             return jsonify({'status': 'success', 
                                 'message': 'Account Created!'})
 
-@auth.route('/protected')
-def protected():
-    '''This is a protected route that requires the user to be logged in'''
-    return jsonify({'status': 'success', 'message': 'You are logged in'})
-
-# Old verify token function
-# @auth.route('/verify-token', methods=['GET', 'POST'])
-# def verify_token():
-#     token = request.json.get('Authorization').split()[1]
-#     try:
-#         decoded_token = jwt.decode(token, secret_key, algorithms=['HS256'])
-#         user_id = decoded_token.get('user_id')
-#         user = User.query.get(user_id)
-#         if user:
-#             login_user(user, remember=True)  # Log in the user
-#             return jsonify({'status': 'success', 'message': 'Token is valid', 'user_id': user_id})
-#         else:
-#             return jsonify({'status': 'error', 'message': 'User not found'}), 401
-#     except jwt.ExpiredSignatureError:
-#         return jsonify({'status': 'error', 'message': 'Token has expired'}), 401
-#     except jwt.InvalidTokenError:
-#         return jsonify({'status': 'error', 'message': 'Invalid token'}), 401
-        
+@auth.route('/@me')
+def get_current_user()->json:
+    '''This function is used to get the current user'''
+    user_id = session.get('user_id')
+    print("got called")
+    if not user_id:
+        print("User not found")
+        return jsonify({'status': 'error', 'message': 'User not found'}), 401
+    user = User.query.get(user_id)
+    if user:
+        print("User found")
+        return jsonify({'status': 'success', 'message': 'User found', 'user': user.username}), 200

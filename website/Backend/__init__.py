@@ -1,11 +1,14 @@
-from flask import Flask, jsonify
+from flask import Flask, session
+from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from dotenv import load_dotenv
 from flask_login import LoginManager
+from .config import ApplicationConfig
 # below is used to connect to the mysql database
 import mysql.connector
 import os
+from redis import Redis
 
 load_dotenv()
 db = SQLAlchemy()
@@ -18,7 +21,7 @@ MYSQL_PASSWORD = os.getenv('mysql_password')
 def create_app()->Flask:
     '''Initialize Flask application and return app object'''
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, supports_credentials=True)
     app.config['SECRET_KEY'] = secret_key
     app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_CONNECTION
     db.init_app(app)
@@ -32,7 +35,9 @@ def create_app()->Flask:
     from .models import User, Earning
     create_database(app)
     
-    
+    # below is used to configure the session
+    app.config.from_object(ApplicationConfig)
+    Session(app)
     # if the user is not logged in it redirects them to the login page
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'

@@ -21,9 +21,8 @@ function AddTips() {
     const [foodSales, setFoodSales] = useState("");
     const [naBevSales, setNaBevSales] = useState("");
     const [alcoholSales, setAlcoholSales] = useState("");
-
     const [date, setDate] = useState("");
- 
+    // Check if the user is logged in
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Declared Tips: ", declaredTips);
@@ -32,7 +31,7 @@ function AddTips() {
         console.log("N/A Bev Sales: ", naBevSales);
         console.log("Alcohol Sales: ", alcoholSales);
         console.log("Date: ", date);
-        axios.post("http://localhost:5000/addtips", {
+        axios.post("http://localhost:5000/", {
             declaredTips: declaredTips,
             cashTips: cashTips,
             foodSales: foodSales,
@@ -147,4 +146,3 @@ function AddTips() {
     );
 }
 export default AddTips;
-

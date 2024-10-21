@@ -1,6 +1,6 @@
 '''This file is used to define the different pages/views of the website'''
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
-from flask_login import login_user, login_required, logout_user, current_user
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify, session
+from flask_login import login_user, logout_user, current_user
 from .models import User, Earning
 import jwt, json, os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -26,23 +26,25 @@ def login()->json:
         if user:
             if check_password_hash(user.password, password):
                 print('Logged in successfully')
-                token = jwt.encode({
-                    'username': user.username,
-                    'exp': 900,
-                }, secret_key, algorithm='HS256')
-                # remembers that the user is logged in until the session is closed
-                # this is how cookies are used to remember the user
-                login_user(user, remember=True)
+                print("logged in")
+                session['user_id'] = user.id
                 return jsonify({'status': 'success', 
-                                'message': 'Logged in successfully',
-                                'token': token})
+                                'message': 'Logged in successfully'})
             else:
-               return jsonify({'status': 'error', 'message': 'Incorrect Username or Password'})
-    return jsonify({'status': 'error', 'message': 'Incorrect Username or Password'})
+               return jsonify({'status': 'error', 'message': 'Incorrect Username or Password'}), 401
+    return jsonify({'status': 'error', 'message': 'Incorrect Username or Password'}), 401
+
+@auth.route('/@me')
+def get_current_user()->json:
+    '''This function is used to get the current user'''
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'status': 'error', 'message': 'User not found'}), 401
+    user = User.query.get(user_id)
+    if user:
+        return jsonify({'status': 'success', 'message': 'User found', 'user': user.username}), 200
 
 @auth.route('/logout')
-# Decorator requires user to be logged in to access this page
-@login_required
 def logout()->str:
     '''Handles logout page'''
     # logs out the user
@@ -50,11 +52,10 @@ def logout()->str:
     return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
-def sign_up()->str:
+def sign_up()->json:
     '''Handles logic for sign up page and creating a new user in the database'''
     if request.method == 'POST':
         data = request.json
-        # This will print the form data to the console
         email = data.get('email')
         username = data.get('username')
         password = data.get('password')
@@ -80,22 +81,31 @@ def sign_up()->str:
             # adds user to DB and commits the change
             db.session.add(new_user)
             db.session.commit()
-            # creates a token for the user
-            # for this session to be valid for 15 minutes
-            token = jwt.encode({
-                    'username': new_user.username,
-                    'exp': 900,
-                }, secret_key, algorithm='HS256')
-            login_user(new_user, remember=True)
-
+            session['user_id'] = new_user.id
             # once account is created redirect the user to the home page
             return jsonify({'status': 'success', 
-                                'message': 'Account Created!',
-                                'token': token})
-    return render_template('signup.html', user=current_user)
+                                'message': 'Account Created!'})
 
 @auth.route('/protected')
-@login_required
 def protected():
     '''This is a protected route that requires the user to be logged in'''
     return jsonify({'status': 'success', 'message': 'You are logged in'})
+
+# Old verify token function
+# @auth.route('/verify-token', methods=['GET', 'POST'])
+# def verify_token():
+#     token = request.json.get('Authorization').split()[1]
+#     try:
+#         decoded_token = jwt.decode(token, secret_key, algorithms=['HS256'])
+#         user_id = decoded_token.get('user_id')
+#         user = User.query.get(user_id)
+#         if user:
+#             login_user(user, remember=True)  # Log in the user
+#             return jsonify({'status': 'success', 'message': 'Token is valid', 'user_id': user_id})
+#         else:
+#             return jsonify({'status': 'error', 'message': 'User not found'}), 401
+#     except jwt.ExpiredSignatureError:
+#         return jsonify({'status': 'error', 'message': 'Token has expired'}), 401
+#     except jwt.InvalidTokenError:
+#         return jsonify({'status': 'error', 'message': 'Invalid token'}), 401
+        

@@ -1,6 +1,5 @@
 '''File used to inialize, run webserver, and create the app object'''
 from website.Backend import create_app
-from flask import jsonify, Response
 app = create_app()
 # This is a route that returns a json object
 if __name__ == '__main__':

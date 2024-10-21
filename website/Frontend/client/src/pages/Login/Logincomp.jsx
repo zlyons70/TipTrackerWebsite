@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import httpClient from "../../httpClient"
 import {
     Card,
     CardContent,
@@ -16,7 +17,6 @@ function Logincard() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [message, setMessage] = useState("")
-    const [token, setToken] = useState("")
     const navigate = useNavigate()
 // handleSubmit function to handle form submission
 // Need to send the data to flask backend
@@ -24,31 +24,47 @@ function Logincard() {
         e.preventDefault()
         console.log("Username: ", username)
         console.log("Password: ", password)
-        fetch("http://localhost:5000/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "success") {
-                setMessage("Login successful")
-                setToken(data.token)
-                localStorage.setItem("token", data.token)
-                navigate("/")
-            } else {
-                setMessage(data.message)
+        const loginUser = async () => {
+            try {
+                const response = await httpClient.post("http://localhost:5000/login", {
+                    username: username,
+                    password: password
+                })
             }
-        })
-        .catch((error) => {
-            console.error('Error:', error)
-            setMessage("Login failed")
-        })
+            catch (error) {
+                if (error === 401)
+                    setMessage("Invalid credentials")
+                else
+                    setMessage("Login failed")
+                
+            }
+        // fetch("http://localhost:5000/login", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify({
+        //         username: username,
+        //         password: password
+        //     })
+
+        }
+        // .then(response => response.json())
+        // .then(data => {
+        //     if (data.status === "success") {
+        //         setMessage("Login successful")
+
+                               
+        //         navigate("/")
+        //     } else {
+        //         setMessage(data.message)
+        //     }
+        // })
+        // .catch((error) => {
+        //     console.error('Error:', error)
+        //     setMessage("Login failed")
+        // })
+        loginUser()
         }
     
 

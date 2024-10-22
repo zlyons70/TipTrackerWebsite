@@ -22,7 +22,7 @@ def login()->json:
         # .first() is used to get the first user that matches the query
         user = User.query.filter_by(username=username).first()
         print("This is in auth.py, handles the login page")
-        print("this print statement is for debugging and workd")
+        print("this print statement is for debugging")
         if user:
             if check_password_hash(user.password, password):
                 print('Logged in successfully')
@@ -37,7 +37,7 @@ def login()->json:
 @auth.route('/logout', methods = ['POST'])
 def logout()->json:
     '''Handles logout button'''
-    session.pop('user_id')
+    session.pop('user_id', None)
     return jsonify({'status': 'success', 'message': 'Logged out successfully'})
 
 @auth.route('/sign-up', methods=['GET', 'POST'])

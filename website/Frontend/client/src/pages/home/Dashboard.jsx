@@ -12,7 +12,7 @@ function Dashboard() {
       (async () => {
           try {
               const response = await httpClient.get('//localhost:5000/@me');
-              setUser(response.data);
+              setUser(response.data.user);
               console.log(response.data);
           } catch (error) {
               console.log("not authenticated")
@@ -23,7 +23,7 @@ function Dashboard() {
     return (
       <>
       <MainNav />
-      <AddTips />
+      <AddTips user={user}/>
       </>
     )
 }

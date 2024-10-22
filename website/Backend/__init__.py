@@ -24,6 +24,11 @@ def create_app()->Flask:
     CORS(app, supports_credentials=True)
     app.config['SECRET_KEY'] = secret_key
     app.config['SQLALCHEMY_DATABASE_URI'] = MYSQL_CONNECTION
+    app.config['SESSION_TYPE'] = 'redis'
+    app.config['SESSION_PERMANENT'] = False
+    app.config['SESSION_USE_SIGNER'] = True
+    app.config['SESSION_REDIS'] = Redis(host='localhost', port=6379)
+    app.config['SESSION_KEY_PREFIX'] = 'session'
     db.init_app(app)
     # once blueprints are defined we need to tell the flask server to use them
     from .views import views
@@ -36,18 +41,18 @@ def create_app()->Flask:
     create_database(app)
     
     # below is used to configure the session
-    app.config.from_object(ApplicationConfig)
+    # app.config.from_object(ApplicationConfig)
     Session(app)
-    # if the user is not logged in it redirects them to the login page
-    login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
-    login_manager.init_app(app)
+    # # if the user is not logged in it redirects them to the login page
+    # login_manager = LoginManager()
+    # login_manager.login_view = 'auth.login'
+    # login_manager.init_app(app)
     
-    @login_manager.user_loader
-    def load_user(id)->User:
-        '''This function is used to load the user from the database'''
-        # Tells flask what user we're looking for
-        return User.query.get(int(id))
+    # @login_manager.user_loader
+    # def load_user(id)->User:
+    #     '''This function is used to load the user from the database'''
+    #     # Tells flask what user we're looking for
+    #     return User.query.get(int(id))
     
     return app
 
@@ -75,7 +80,7 @@ def create_database(app)->None:
         db.create_all()
     return None
 
-def delete_database(app)->None:
+def delete_database()->None:
     '''Delete the database if it exists'''
     mydb = mysql.connector.connect(
         host="localhost",

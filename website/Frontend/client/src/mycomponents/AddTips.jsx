@@ -14,8 +14,8 @@ import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import axios from "axios";
-
-function AddTips() {
+import httpClient from "../httpClient"
+function AddTips({ user }) {
     const [declaredTips, setDeclaredTips] = useState("");
     const [cashTips, setCashTips] = useState("");
     const [foodSales, setFoodSales] = useState("");
@@ -23,30 +23,60 @@ function AddTips() {
     const [alcoholSales, setAlcoholSales] = useState("");
     const [date, setDate] = useState("");
     
+    // const getUser = async () => {
+    //     try {
+    //         const response = await .get("http://localhost:5000/@me");
+    //         setUser(response.data);
+    //         console.log(response.data);
+    //     } catch (error) {
+    //         console.log("not authenticated");
+    //         navigate("/login");
+    //     }
+    // }
+    // getUser();
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("User: ", user);
         console.log("Declared Tips: ", declaredTips);
         console.log("Cash Tips: ", cashTips);
         console.log("Food Sales: ", foodSales);
         console.log("N/A Bev Sales: ", naBevSales);
         console.log("Alcohol Sales: ", alcoholSales);
         console.log("Date: ", date);
-        axios.post("http://localhost:5000/", {
-            declaredTips: declaredTips,
-            cashTips: cashTips,
-            foodSales: foodSales,
-            naBevSales: naBevSales,
-            alcoholSales: alcoholSales,
-            date: date
-        })
-        .then(response => response.json())
-        then(data => {
-            if (data.status === "success") {
+        const sendData = async () => {
+            try {
+                const response = await httpClient.post("http://localhost:5000/", {
+                    username: user,
+                    declaredTips: declaredTips,
+                    cashTips: cashTips,
+                    foodSales: foodSales,
+                    naBevSales: naBevSales,
+                    alcoholSales: alcoholSales,
+                    date: date
+                });
                 setMessage("Tips added successfully");
-            } else {
-                setMessage(data.message);
             }
-        });
+            catch (error) {
+                console.log("Failed to send data");
+            }
+        }
+        sendData()
+        // axios.post("http://localhost:5000/", {
+        //     declaredTips: declaredTips,
+        //     cashTips: cashTips,
+        //     foodSales: foodSales,
+        //     naBevSales: naBevSales,
+        //     alcoholSales: alcoholSales,
+        //     date: date
+        // })
+        // .then(response => response.json())
+        // then(data => {
+        //     if (data.status === "success") {
+        //         setMessage("Tips added successfully");
+        //     } else {
+        //         setMessage(data.message);
+        //     }
+        // });
     }
 
     return (

@@ -1,7 +1,7 @@
 '''This file is used to define the different pages/views of the website'''
 import json
 from flask import Blueprint, request, jsonify, session
-from .models import Earning
+from .models import Earning, User
 from .auth import get_current_user
 from . import db
 from datetime import datetime
@@ -12,13 +12,12 @@ views = Blueprint('views', __name__)
 def home()->json:
     '''This function handles the logic of the home page'''
     print("This is in views.py, handles the home page")
-    user_data = get_current_user()
-    print(user_data)
-    user_id = "shit"
+    
     if request.method == 'POST':
         data = request.json
+        user = data.get('username')
         print(data)
-        return jsonify({'status': 'success', 'message': 'Data received', 'user': user_id})
+        return jsonify({'status': 'success', 'message': 'Data received', 'user': user})
     return jsonify({'status': 'error', 'message': 'Data not received'})
     # if request.method == 'POST':
     #     tip = float(request.form.get('tip'))

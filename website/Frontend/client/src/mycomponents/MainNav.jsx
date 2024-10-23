@@ -27,17 +27,22 @@ function MainNav() {
         <NavbarBrand>HI</NavbarBrand>
         <NavbarContent className="sm:flex gap-4" justify="center">
           <NavbarItem isActive={location.pathname === '/'}>
-            <Link color="foreground" href="#">
+            <Link color="foreground" href="/">
               Home
             </Link>
           </NavbarItem>
-          <NavbarItem isActive={location.pathname === '/edittips'}>
-            <Link href="#" aria-current="page">
+          <NavbarItem isActive={location.pathname === '/viewtips'}>
+            <Link href="viewtips" aria-current="page">
+              View Tips
+            </Link>
+          </NavbarItem>
+          <NavbarItem isActive={location.pathname === '/edit'}>
+            <Link href="edit" aria-current="page">
               Edit Tips
             </Link>
           </NavbarItem>
           <NavbarItem isActive={location.pathname === '/account'}>
-            <Link color="foreground" href="#">
+            <Link color="foreground" href="/account">
               Account
             </Link>
           </NavbarItem>

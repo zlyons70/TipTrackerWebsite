@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import './App.css'
-import axios from 'axios'
 import Dashboard from './pages/home/Dashboard'
 import Logincard from './pages/Login/Logincomp'
 import Signupcard from './pages/signup/Signupcomp'
+import ViewTips from './pages/viewtip/ViewTips'
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -26,6 +25,8 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Logincard />} />
         <Route path="/signup" element={<Signupcard />} />
+        <Route path="/viewtips" element={<ViewTips />} />
+        <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </BrowserRouter>
 )

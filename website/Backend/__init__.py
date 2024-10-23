@@ -3,7 +3,6 @@ from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from dotenv import load_dotenv
-# below is used to connect to the mysql database
 import mysql.connector
 import os
 from redis import Redis

@@ -1,8 +1,5 @@
 '''This file is used to handle the database of the website'''
 from . import db
-from flask_login import UserMixin
-from sqlalchemy.sql import func
-from datetime import datetime
 
 class Earning(db.Model):
     '''This class is used to define the earning table in the database'''

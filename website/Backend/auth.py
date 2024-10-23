@@ -1,7 +1,6 @@
 '''This file is used to define the different pages/views of the website'''
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify, session
-from flask_login import login_user, logout_user, current_user
-from .models import User, Earning
+from flask import Blueprint, request,jsonify, session
+from .models import User
 import json, os, uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db

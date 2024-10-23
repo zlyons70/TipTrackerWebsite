@@ -1,10 +1,8 @@
-from flask import Flask, session
+from flask import Flask
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from dotenv import load_dotenv
-from flask_login import LoginManager
-from .config import ApplicationConfig
 # below is used to connect to the mysql database
 import mysql.connector
 import os

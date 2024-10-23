@@ -38,6 +38,7 @@ def create_app()->Flask:
     app.register_blueprint(auth, url_prefix='/')
     
     from .models import User, Earning
+    #delete_database()
     create_database(app)
     
     # below is used to configure the session

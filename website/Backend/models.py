@@ -6,22 +6,28 @@ from datetime import datetime
 
 class Earning(db.Model):
     '''This class is used to define the earning table in the database'''
+    __tablename__ = 'earning'
     id = db.Column(db.Integer, primary_key=True)
-    # the below data that our user will be storing is going to be the tip number
-    data = db.Column(db.Float, nullable=False)
-    # this automatically sets the date to the current date and time
-    date = db.Column(db.DateTime(timezone=True))
-    # This is a foreign key that is linked to the user table
-    # this is used to link the note to the user
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    job_class = db.Column(db.String(150))
+    date = db.Column(db.DateTime(timezone=False))
+    declared_tips = db.Column(db.Float)
+    cash_tips = db.Column(db.Float)
+    food_sales = db.Column(db.Float)
+    na_bev_sales = db.Column(db.Float)
+    alcohol_sales = db.Column(db.Float)
+    # relationship between the user and the earnings
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', back_populates='earnings')
     
-class User(db.Model, UserMixin):
+    
+class User(db.Model):
     '''This class is used to define the user table in the database'''
+    __tablename__ = 'user'
     # Primary key is a unique identifier for each user
-    id = db.Column(db.Integer, primary_key=True)
-    # max string lenght is 150 and each email must be unique
+    id = db.Column(db.String(36), primary_key=True)
+    # max string length is 150 and each email must be unique
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(255))
     username = db.Column(db.String(150), unique=True)
     # below is essentially a list of all earnings the user has created
-    earning = db.relationship('Earning')
+    earnings = db.relationship('Earning', back_populates='user')

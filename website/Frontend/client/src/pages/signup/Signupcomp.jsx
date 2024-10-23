@@ -131,7 +131,7 @@ function Signupcard() {
                 </div>
             </CardFooter>
         </Card>
-        <p>{message && <p> {message}</p>}</p>
+        {message && <p> {message}</p>}
         </div>
         </div>
     )

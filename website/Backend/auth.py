@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify, session
 from flask_login import login_user, logout_user, current_user
 from .models import User, Earning
-import jwt, json, os
+import json, os, uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from dotenv import load_dotenv
@@ -66,7 +66,7 @@ def sign_up()->json:
         else:
             # Below hashes the password to prevent it from being stored in plain text
             # note that this is a one way hash
-            new_user = User(email=email, username=username, password=generate_password_hash(password, method='scrypt'))
+            new_user = User(email=email, username=username, id=uuid.uuid4(), password=generate_password_hash(password, method='scrypt'))
             # adds user to DB and commits the change
             db.session.add(new_user)
             db.session.commit()

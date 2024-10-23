@@ -13,7 +13,6 @@ import { format, set } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
-import axios from "axios";
 import httpClient from "../httpClient"
 function AddTips({ user }) {
     const [declaredTips, setDeclaredTips] = useState("");
@@ -22,31 +21,39 @@ function AddTips({ user }) {
     const [naBevSales, setNaBevSales] = useState("");
     const [alcoholSales, setAlcoholSales] = useState("");
     const [date, setDate] = useState("");
-    
-    // const getUser = async () => {
-    //     try {
-    //         const response = await .get("http://localhost:5000/@me");
-    //         setUser(response.data);
-    //         console.log(response.data);
-    //     } catch (error) {
-    //         console.log("not authenticated");
-    //         navigate("/login");
-    //     }
-    // }
-    // getUser();
+    const [jobClass, setJob] = useState("");
+    const [message, setMessage] = useState("");
+
+    const isValidMoneyValue = (value) => {
+        const number = parseFloat(value);
+        const decimalPlaces = value.split(".")[1];
+        return !isNaN(number) && number >= 0 && (!decimalPlaces || decimalPlaces.length <= 2);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        setMessage("");
+        if (!isValidMoneyValue(declaredTips) || !isValidMoneyValue(cashTips) || 
+        (!isValidMoneyValue(foodSales) && foodSales !=="" )
+            || (naBevSales !=="" && !isValidMoneyValue(naBevSales)) || 
+        (alcoholSales !=="" && !isValidMoneyValue(alcoholSales))) {
+            setMessage("Invalid money value");
+            return;
+            }
+
         console.log("User: ", user);
+        console.log("Date: ", date);
+        console.log("Job Class: ", jobClass);
         console.log("Declared Tips: ", declaredTips);
         console.log("Cash Tips: ", cashTips);
         console.log("Food Sales: ", foodSales);
         console.log("N/A Bev Sales: ", naBevSales);
         console.log("Alcohol Sales: ", alcoholSales);
-        console.log("Date: ", date);
         const sendData = async () => {
             try {
                 const response = await httpClient.post("http://localhost:5000/", {
                     username: user,
+                    jobClass: jobClass,
                     declaredTips: declaredTips,
                     cashTips: cashTips,
                     foodSales: foodSales,
@@ -54,29 +61,15 @@ function AddTips({ user }) {
                     alcoholSales: alcoholSales,
                     date: date
                 });
+                console.log(response);
                 setMessage("Tips added successfully");
             }
             catch (error) {
                 console.log("Failed to send data");
+                setMessage("Failed to send data");
             }
         }
-        sendData()
-        // axios.post("http://localhost:5000/", {
-        //     declaredTips: declaredTips,
-        //     cashTips: cashTips,
-        //     foodSales: foodSales,
-        //     naBevSales: naBevSales,
-        //     alcoholSales: alcoholSales,
-        //     date: date
-        // })
-        // .then(response => response.json())
-        // then(data => {
-        //     if (data.status === "success") {
-        //         setMessage("Tips added successfully");
-        //     } else {
-        //         setMessage(data.message);
-        //     }
-        // });
+        sendData();
     }
 
     return (
@@ -90,14 +83,14 @@ function AddTips({ user }) {
             <Divider/>
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4 justify-center">
-                    <Select>
+                    <Select onValueChange={(value) => setJob(value)}>
                         <SelectTrigger className="w-[280px]">
                             <SelectValue placeholder="Select Job Class" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="bayhost">BayHost</SelectItem>
                             <SelectItem value="shiftlead">Shift Lead</SelectItem>
-                            <SelectItem value="eventambassador">Event Ambassador</SelectItem>
+                            <SelectItem value="eventam">Event Ambassador</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -131,7 +124,7 @@ function AddTips({ user }) {
             
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
-                    <Input type="text" label="Declared Tips" placeholder="Enter your Declared Tips" 
+                    <Input type="number" step="0.01" label="Declared Tips" placeholder="Enter your Declared Tips" 
                         id="declaredTips"
                         value={declaredTips}
                         onChange={(e) => setDeclaredTips(e.target.value)}
@@ -140,7 +133,7 @@ function AddTips({ user }) {
             </CardBody>
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
-                    <Input type="text" label="Cash Tips" placeholder="Enter your Cash Tips" 
+                    <Input type="number" step="0.01" label="Cash Tips" placeholder="Enter your Cash Tips" 
                         id="cashTips"
                         value={cashTips}
                         onChange={(e) => setCashTips(e.target.value)}/>
@@ -155,23 +148,33 @@ function AddTips({ user }) {
             </CardHeader>
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4"> 
-                    <Input type="text" label="Food Sales" placeholder="Enter your Food Sales" />
+                    <Input type="number" label="Food Sales" placeholder="Enter your Food Sales" 
+                    id="foodSales"
+                    value={foodSales}
+                    onChange={(e) => setFoodSales(e.target.value)}/>
                 </div>
             </CardBody>
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4"> 
-                    <Input type="text" label="N/A Bev Sales" placeholder="Enter your N/A Bev Sales" />
+                    <Input type="number" step="0.01" label="N/A Bev Sales" placeholder="Enter your N/A Bev Sales" 
+                    id="naBevSales"
+                    value={naBevSales}
+                    onChange={(e) => setNaBevSales(e.target.value)}/>
                 </div>
             </CardBody>
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4"> 
-                    <Input type="text" label="Alcohol Sales" placeholder="Enter your Alcohol Sales" />
+                    <Input type="number" step="0.01" label="Alcohol Sales" placeholder="Enter your Alcohol Sales" 
+                    id="alcoholSales"
+                    value={alcoholSales}
+                    onChange={(e) => setAlcoholSales(e.target.value)}/>
                 </div>
             </CardBody>
             <CardFooter className="flex justify-center">
                 <Button className="bg-slate-blueish" onClick={handleSubmit}>Submit</Button>
             </CardFooter>
         </Card>
+        {message && <p> {message}</p>}
         </>
     );
 }

@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom"
 import "../../index.css"
 import httpClient from "../../httpClient"
 import MainNav  from "../../mycomponents/MainNav"
-import ShowTipsGraphs from "./showTipsGraphs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import TipCalendar from "./TipCalendar"
+import { CalendarIcon } from "@radix-ui/react-icons"
 
 function ViewTips() {
   const navigate = useNavigate();
@@ -22,10 +24,24 @@ function ViewTips() {
           }
       })();
   }, [navigate]);
+
     return (
       <>
       <MainNav />
-
+      <div className="flex justify-center h-full">
+      <Tabs defaultValue="Calendar" className="w-[400px]" >
+        <TabsList>
+          <TabsTrigger value="Calendar" > <CalendarIcon/>Calendar</TabsTrigger>
+          <TabsTrigger value="Other">Other</TabsTrigger>
+        </TabsList>
+        <TabsContent value="Calendar">
+          <TipCalendar />
+        </TabsContent>
+        <TabsContent value="Other">
+          <div>Other content</div>
+        </TabsContent>
+      </Tabs>
+      </div>
       </>
     )
 }

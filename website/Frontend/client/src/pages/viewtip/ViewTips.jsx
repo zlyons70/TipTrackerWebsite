@@ -15,7 +15,7 @@ function ViewTips() {
     // Ensure user is authenticated
       (async () => {
           try {
-              const response = await httpClient.get('//localhost:5000/@me');
+              const response = await httpClient.get('http://localhost:5000/@me');
               setUser(response.data.user);
               console.log(response.data);
           } catch (error) {
@@ -35,7 +35,7 @@ function ViewTips() {
           <TabsTrigger value="Other">Other</TabsTrigger>
         </TabsList>
         <TabsContent value="Calendar">
-          <TipCalendar />
+          <TipCalendar user={user} />
         </TabsContent>
         <TabsContent value="Other">
           <div>Other content</div>

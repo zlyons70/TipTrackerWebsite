@@ -1,6 +1,6 @@
 '''This file is used to define the different pages/views of the website'''
 from flask import Blueprint, request,jsonify, session
-from .models import User
+from .models import User, UserSettings
 import json, os, uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
@@ -68,6 +68,10 @@ def sign_up()->json:
             new_user = User(email=email, username=username, id=uuid.uuid4(), password=generate_password_hash(password, method='scrypt'))
             # adds user to DB and commits the change
             db.session.add(new_user)
+            db.session.commit()
+            # create default settings for the user
+            new_user_settings = UserSettings(user_id=new_user.id, hourly_rate=13, taxes=1)
+            db.session.add(new_user_settings)
             db.session.commit()
             session['user_id'] = new_user.id
             # once account is created redirect the user to the home page

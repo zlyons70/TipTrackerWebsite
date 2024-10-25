@@ -3,20 +3,22 @@ import { useState } from "react";
 import {Input} from "@nextui-org/input";
 import {Button} from "@nextui-org/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {Card, CardHeader, CardBody, CardFooter, Divider, Link} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, CardFooter, Divider} from "@nextui-org/react";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
   } from "@/components/ui/popover"
-import { format, set } from "date-fns"
+import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import httpClient from "../httpClient"
+
 function AddTips({ user }) {
     const [declaredTips, setDeclaredTips] = useState("");
     const [cashTips, setCashTips] = useState("");
+    const [hoursWorked, setHoursWorked] = useState("");
     const [foodSales, setFoodSales] = useState("");
     const [naBevSales, setNaBevSales] = useState("");
     const [alcoholSales, setAlcoholSales] = useState("");
@@ -46,6 +48,7 @@ function AddTips({ user }) {
         console.log("Job Class: ", jobClass);
         console.log("Declared Tips: ", declaredTips);
         console.log("Cash Tips: ", cashTips);
+        console.log("hoursWorked: ", hoursWorked);
         console.log("Food Sales: ", foodSales);
         console.log("N/A Bev Sales: ", naBevSales);
         console.log("Alcohol Sales: ", alcoholSales);
@@ -54,6 +57,7 @@ function AddTips({ user }) {
                 const response = await httpClient.post("http://localhost:5000/", {
                     username: user,
                     jobClass: jobClass,
+                    hoursWorked: hoursWorked,
                     declaredTips: declaredTips,
                     cashTips: cashTips,
                     foodSales: foodSales,
@@ -121,7 +125,15 @@ function AddTips({ user }) {
                     </Popover>
                 </div>
             </CardBody>
-            
+            <CardBody className="bg-gray-50 p-4 rounded-b-lg">
+                <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
+                    <Input type="number" step="0.01" label="Hours Worked" placeholder="Enter your Hours Worked" 
+                        id="hoursWorked"
+                        value={hoursWorked}
+                        onChange={(e) => setHoursWorked(e.target.value)}
+                        />
+                </div>
+            </CardBody>
             <CardBody className="bg-gray-50 p-4 rounded-b-lg">
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-4"> 
                     <Input type="number" step="0.01" label="Declared Tips" placeholder="Enter your Declared Tips" 

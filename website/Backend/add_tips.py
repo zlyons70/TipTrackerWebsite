@@ -17,7 +17,7 @@ def add_tips(data: json) -> json:
     
     if user:
         try:
-            new_earning = tipout_taxes(data, user)
+            new_earning = tipout_taxes(data)
             db.session.add(new_earning)
             db.session.commit()
             return jsonify({'status': 'success', 'message': 'Tips added successfully', 'user': username})
@@ -52,7 +52,8 @@ def tipout_taxes(data: json) -> Earning:
     
     gross = declared_tips + cash_tips + hours_worked*user.user_settings.hourly_rate
     net = gross - (gross * user.user_settings.taxes)
-    
+    print("gross", gross)
+    print("net", net)
     return Earning(job_class=job_class, date=converted_date, hours_worked=hours_worked, declared_tips=declared_tips, 
                                 cash_tips=cash_tips, food_sales=food_sales, na_bev_sales=na_bev_sales, 
                                 alcohol_sales=alcohol_sales, gross=gross, net=net, user_id=user.id)

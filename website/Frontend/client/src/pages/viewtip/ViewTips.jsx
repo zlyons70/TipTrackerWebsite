@@ -6,11 +6,12 @@ import MainNav  from "../../mycomponents/MainNav"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import TipCalendar from "./TipCalendar"
 import { CalendarIcon } from "@radix-ui/react-icons"
+import { Spinner } from "@nextui-org/spinner";
 
 function ViewTips() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     // Ensure user is authenticated
       (async () => {
@@ -18,13 +19,26 @@ function ViewTips() {
               const response = await httpClient.get('http://localhost:5000/@me');
               setUser(response.data.user);
               console.log(response.data);
+              console.log("this got called, user auth in viewtips")
           } catch (error) {
               console.log("not authenticated")
               navigate('/login');
+          } finally {
+              setLoading(false);
           }
       })();
   }, [navigate]);
-
+  // Doesn't render anything until user is authenticated
+  if (loading) {
+    return (
+      <>
+      <MainNav />
+      <div className="flex justify-center h-full">
+        <Spinner size="large" />
+      </div>
+      </>
+    )
+  }
     return (
       <>
       <MainNav />

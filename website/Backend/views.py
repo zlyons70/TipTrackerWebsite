@@ -42,7 +42,7 @@ def view_tips()->json:
             return jsonify({'status': 'error', 'message': 'Not authenticated'})
         if time == 'month':
             # get Month
-            print("in month")
+            print("in month in views")
             return jsonify({'status': 'success', 'message': 'Month tips', 'data': get_tips_month(month, year, user_id)})
         if time =='week':
             # get Week
